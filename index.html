@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0f673b">
+  <meta name="description" content="Consulta documental de dispositivos e TAGs do sistema de proteção contra incêndio. JSON local, sem API.">
+  <title>FS | Consulta de dispositivos de incêndio</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/dados-locais.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="ico-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7.4"/><path d="m16.4 16.4 4.4 4.4"/></symbol>
+    <symbol id="ico-shield" viewBox="0 0 24 24"><path d="M12 2 20.5 6v6.2c0 4.3-2.6 7.2-8.5 9.8C6.1 19.4 3.5 16.5 3.5 12.2V6L12 2Z"/><path d="m8.2 12.2 2.5 2.5 5.5-5.5"/></symbol>
+    <symbol id="ico-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v7c0 4 16 4 16 0V5M4 12v7c0 4 16 4 16 0v-7"/></symbol>
+    <symbol id="ico-file" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-7-7Zm0 0v7h7M8 14h8m-8 4h5"/></symbol>
+    <symbol id="ico-folder" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></symbol>
+    <symbol id="ico-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+    <symbol id="ico-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol>
+    <symbol id="ico-external" viewBox="0 0 24 24"><path d="m8 16 10-10M9 6h9v9M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6"/></symbol>
+    <symbol id="ico-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+    <symbol id="ico-warning" viewBox="0 0 24 24"><path d="m11 3-9 16a1.2 1.2 0 0 0 1 1.8h18a1.2 1.2 0 0 0 1-1.8L13 3a1.2 1.2 0 0 0-2 0Z"/><path d="M12 9v5m0 3h.01"/></symbol>
+    <symbol id="ico-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 10v7m0-10h.01"/></symbol>
+    <symbol id="ico-upload" viewBox="0 0 24 24"><path d="M12 16V3M7 8l5-5 5 5M4 16v4h16v-4"/></symbol>
+    <symbol id="ico-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 17v4h16v-4"/></symbol>
+    <symbol id="ico-refresh" viewBox="0 0 24 24"><path d="M20 6v5h-5M4 18v-5h5"/><path d="M5.6 9A7 7 0 0 1 18 6l2 5M4 13l2 5a7 7 0 0 0 12.4-3"/></symbol>
+    <symbol id="ico-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="ico-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+    <symbol id="ico-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="ico-layout" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 9v12"/></symbol>
+    <symbol id="ico-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.8.5l2-2a5 5 0 0 0-7.1-7.1l-2 2M14 11a5 5 0 0 0-7.8-.5l-2 2a5 5 0 0 0 7.1 7.1l2-2"/></symbol>
+    <symbol id="ico-list" viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  </svg>
+  <div class="top-stripe" aria-hidden="true"></div>
+  <a class="skip-link" href="#consulta">Ir para a pesquisa</a>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-area">
+        <div class="brand-lockup"><span class="brand-fs">FS<span class="brand-leaf"></span></span><span class="brand-kicker">GESTÃO INDUSTRIAL <strong>CONSULTA DOCUMENTAL</strong></span></div>
+        <p class="brand-caption">PROTEÇÃO CONTRA INCÊNDIO</p>
+      </div>
+      <div class="sidebar-group">
+        <p class="menu-eyebrow">ÁREA DE TRABALHO</p>
+        <button type="button" id="nav-search" class="nav-link is-active"><svg class="icon"><use href="#ico-search"/></svg><span>Consulta de TAGs</span><svg class="icon nav-arrow"><use href="#ico-chevron"/></svg></button>
+        <button type="button" data-open="base-dialog" class="nav-link"><svg class="icon"><use href="#ico-database"/></svg><span>Base de dados</span><span class="nav-badge" id="nav-count">—</span></button>
+        <button type="button" data-open="docs-dialog" class="nav-link"><svg class="icon"><use href="#ico-folder"/></svg><span>Documentos PDF</span></button>
+      </div>
+      <div class="sidebar-group separator">
+        <p class="menu-eyebrow">INFORMAÇÕES</p>
+        <button type="button" data-open="help-dialog" class="nav-link"><svg class="icon"><use href="#ico-info"/></svg><span>Como utilizar</span></button>
+      </div>
+      <div class="side-spacer"></div>
+      <div class="side-info"><span class="small-label">ORIGEM DA CONSULTA</span><div class="side-status"><span class="status-dot"></span><span id="side-source">Carregando dados...</span></div><p>Leitura documental. Não representa os alarmes em tempo real.</p></div>
+      <div class="sidebar-foot">FS · ENGENHARIA INDUSTRIAL</div>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>FS</span><span class="breadcrumb-sep">/</span><span>Segurança industrial</span><span class="breadcrumb-sep">/</span><strong>Consulta de incêndio</strong></div>
+        <div class="topbar-right"><span class="top-pill"><span class="status-dot"></span><span id="source-status">Carregando JSON...</span></span><button class="btn btn-soft btn-small" type="button" data-import><svg class="icon"><use href="#ico-upload"/></svg>Carregar JSON</button></div>
+      </header>
+
+      <main class="workspace">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-content"><p class="hero-eyebrow"><span class="eyebrow-line"></span>FS · SISTEMA DE PROTEÇÃO CONTRA INCÊNDIO</p><h1 id="page-title">Encontre a TAG.<br><span>Consulte o projeto.</span></h1><p>Pesquise dispositivos por endereço, descrição ou setor e encontre os arquivos técnicos relacionados, em uma única consulta.</p><div class="hero-foot"><span><svg class="icon"><use href="#ico-check"/></svg></div>
+          <div class="hero-pattern" aria-hidden="true"></div><div class="hero-watermark" aria-hidden="true">FS</div>
+        </section>
+
+        <section class="metrics" aria-label="Indicadores da base carregada">
+          <article class="metric"><div class="metric-head"><span>TAGs cadastradas</span><span class="metric-icon"><svg class="icon"><use href="#ico-layout"/></svg></span></div><p id="total-tags" class="metric-number">—</p><p class="metric-caption">Endereços disponíveis para consulta</p><span class="metric-accent green"></span></article>
+          <article class="metric"><div class="metric-head"><span>Setores identificados</span><span class="metric-icon"><svg class="icon"><use href="#ico-pin"/></svg></span></div><p id="total-sectors" class="metric-number">—</p><p class="metric-caption">Localizações cadastradas na base</p><span class="metric-accent lime"></span></article>
+          <article class="metric"><div class="metric-head"><span>Projetos referenciados</span><span class="metric-icon"><svg class="icon"><use href="#ico-file"/></svg></span></div><p id="total-pdfs" class="metric-number">—</p><p class="metric-caption">Nomes únicos de arquivos PDF</p><span class="metric-accent yellow"></span></article>
+        </section>
+
+        <section class="search-panel" id="consulta" aria-labelledby="search-title">
+          <div class="section-line"><div><span class="small-label">DADOS E CONSULTA</span><h2 id="search-title">Pesquisar dispositivo</h2></div><span class="instant-pill"><span class="small-green-dot"></span>Busca instantânea</span></div>
+          <form id="search-form" role="search"><label class="input-label" for="search">TAG, código, descrição ou localização</label><div class="search-row"><div class="search-input-wrap"><svg class="icon"><use href="#ico-search"/></svg><input type="search" id="search" name="tag" autocomplete="off" spellcheck="false" placeholder="Ex.: N008L01M064 ou MILHO 4" aria-controls="results"><button type="button" id="clear-search" class="clear-input hidden" aria-label="Limpar busca"><svg class="icon"><use href="#ico-close"/></svg></button></div><button class="btn btn-primary" type="submit">Buscar <svg class="icon"><use href="#ico-arrow"/></svg></button></div></form>
+          <div class="filters-row"><div class="select-wrap"><label for="sector-filter">Setor</label><select id="sector-filter"><option value="">Todos os setores</option></select></div><div class="quick-search"><span>EXEMPLOS:</span><div id="examples" class="chips"></div></div><button class="inline-btn" id="reset-filters" type="button">Limpar filtros</button></div>
+          <div class="source-message hidden" id="source-message" role="status"></div>
+        </section>
+
+        <section aria-labelledby="results-title" class="results-section">
+          <div class="results-title-row"><div class="results-title-left"><div><span class="small-label">INVENTÁRIO DOCUMENTAL</span><h2 id="results-title">Resultados da consulta</h2></div><span class="result-count" id="results-count" aria-live="polite">—</span></div><button type="button" class="inline-btn" id="show-all">Ver todas as TAGs <svg class="icon"><use href="#ico-arrow"/></svg></button></div>
+          <div id="results" class="results-grid"></div>
+          <button type="button" class="btn btn-more hidden" id="load-more"><svg class="icon"><use href="#ico-list"/></svg>Mostrar mais resultados</button>
+        </section>
+
+        <section class="tip"><div class="tip-icon"><svg class="icon"><use href="#ico-info"/></svg></div><div><strong>Base de dados independente</strong><p>Em hospedagem estática, o painel lê <code>app.json</code> automaticamente. Sem servidor, utiliza a cópia offline ou o JSON que você selecionar. A consulta não monitora o estado dos dispositivos.</p></div><button type="button" data-open="base-dialog" class="inline-btn">Gerenciar base <svg class="icon"><use href="#ico-external"/></svg></button></section>
+        <footer class="page-footer"><span>FS · Gestão industrial | Consulta de projetos de incêndio</span><span id="source-footer">Aguardando base...</span></footer>
+      </main>
+    </div>
+  </div>
+
+  <input id="json-input" type="file" accept=".json,application/json" hidden>
+  <input id="pdf-input" type="file" accept=".pdf,application/pdf" multiple hidden>
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog class="modal" id="base-dialog" aria-labelledby="base-title"><div class="modal-head"><div><span class="small-label">ARQUIVO DE ORIGEM</span><h2 id="base-title">Gerenciar base JSON</h2></div><button type="button" data-close class="close-modal" aria-label="Fechar"><svg class="icon"><use href="#ico-close"/></svg></button></div><div class="modal-body"><div class="base-summary"><span class="small-label">BASE EM USO</span><strong id="base-name">Carregando...</strong><p id="base-detail">—</p></div><p class="body-copy">Você pode substituir a base por um <strong>app.json</strong> completo. O arquivo é processado no navegador, sem envio para servidores. Quando permitido pelo navegador, a base importada fica salva para as próximas visitas.</p><button type="button" class="btn btn-primary btn-wide" data-import><svg class="icon"><use href="#ico-upload"/></svg>Selecionar meu arquivo JSON</button><button type="button" id="reload-json" class="btn btn-outline btn-wide"><svg class="icon"><use href="#ico-refresh"/></svg>Recarregar app.json do site</button><button type="button" id="export-offline" class="btn btn-outline btn-wide"><svg class="icon"><use href="#ico-download"/></svg>Baixar cópia offline dos dados</button><p class="micro-copy">Se abrir <code>index.html</code> com dois cliques (<code>file://</code>), o navegador não permite ler <code>app.json</code> automaticamente. Use “Selecionar meu arquivo JSON” ou substitua <code>assets/dados-locais.js</code> pelo arquivo exportado. Em HTTP/HTTPS, a leitura é automática.</p><div id="import-error" class="error-box hidden" role="alert"></div><div class="format-card"><strong>Formatos aceitos</strong><p>Listas com <code>codigo</code> ou <code>tag</code>, registros agrupados por setor, objetos identificados pelo código e mapas simples do tipo <code>"N003L01M008": "DETECTOR..."</code>.</p></div></div></dialog>
+
+  <dialog class="modal" id="docs-dialog" aria-labelledby="docs-title"><div class="modal-head"><div><span class="small-label">PROJETOS TÉCNICOS</span><h2 id="docs-title">Documentos PDF</h2></div><button type="button" data-close class="close-modal" aria-label="Fechar"><svg class="icon"><use href="#ico-close"/></svg></button></div><div class="modal-body"><p class="body-copy">O JSON relaciona os nomes dos projetos. Para abrir um PDF, coloque o arquivo na pasta <code>arquivos/</code> junto do site ou vincule o PDF do seu computador para esta sessão.</p><button type="button" data-pdfs class="btn btn-primary btn-wide"><svg class="icon"><use href="#ico-upload"/></svg>Selecionar arquivos PDF</button><p class="micro-copy" id="pdf-summary">Nenhum PDF vinculado nesta sessão.</p></div></dialog>
+
+  <dialog class="modal" id="help-dialog" aria-labelledby="help-title"><div class="modal-head"><div><span class="small-label">GUIA DE CONSULTA</span><h2 id="help-title">Como utilizar</h2></div><button type="button" data-close class="close-modal" aria-label="Fechar"><svg class="icon"><use href="#ico-close"/></svg></button></div><div class="modal-body"><div class="help-item"><b>01</b><div><strong>Carregue a sua base</strong><p>O painel já inclui uma base local. Para consultar outro arquivo, clique em “Carregar JSON”.</p></div></div><div class="help-item"><b>02</b><div><strong>Digite uma TAG</strong><p>Pesquise pelo endereço inteiro ou parcial, com ou sem separadores, ou pelo setor e descrição.</p></div></div><div class="help-item"><b>03</b><div><strong>Acesse os projetos</strong><p>Os nomes dos PDFs aparecem na ficha. Se você tiver o documento original, vincule-o ou mantenha-o na pasta <code>arquivos/</code>.</p></div></div></div></dialog>
+
+  <dialog class="modal pdf-modal" id="pdf-dialog" aria-labelledby="pdf-title"><div class="modal-head"><div><span class="small-label">DOCUMENTAÇÃO ASSOCIADA</span><h2 id="pdf-title">Projeto PDF</h2></div><button type="button" data-close class="close-modal" aria-label="Fechar"><svg class="icon"><use href="#ico-close"/></svg></button></div><div class="pdf-content" id="pdf-content"></div><div class="pdf-controls"><button type="button" data-pdfs class="btn btn-outline"><svg class="icon"><use href="#ico-upload"/></svg>Vincular PDF</button><a class="btn btn-primary hidden" id="pdf-open-link" target="_blank" rel="noopener noreferrer"><svg class="icon"><use href="#ico-external"/></svg>Abrir documento</a></div></dialog>
+  <noscript><div class="noscript">Ative o JavaScript do navegador para consultar o sistema de incêndio.</div></noscript>
+</body>
+</html>
